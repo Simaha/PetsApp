@@ -103,4 +103,5 @@
                 style="@style/EditorUnitsStyle"/>
         </RelativeLayout>
     </LinearLayout>
+
 </LinearLayout>

@@ -8,6 +8,9 @@ import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+/*
+ *Displays list of pets that were entered and stored from the EditorActivity
+ */
 public class CatalogActivity extends AppCompatActivity {
 
     @Override
