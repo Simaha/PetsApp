@@ -3,14 +3,17 @@ package com.example.pets;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pets.data.PetContract.PetEntry;
 import com.example.pets.data.PetDbHelper;
@@ -20,6 +23,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  *Displays list of pets that were entered and stored from the EditorActivity
  */
 public class CatalogActivity extends AppCompatActivity {
+
+    // To access our database, we instantiate our subclass of SQLiteOpenHelper
+    // and pass the context, which is the current activity.
+    private PetDbHelper mDbHelper = new PetDbHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +43,14 @@ public class CatalogActivity extends AppCompatActivity {
             }
         });
 
-        PetDbHelper mDbHelper = new PetDbHelper(this);
         //SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        //displayDatabaseInfo();
+       //displayDatabaseInfo();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        displayDatabaseInfo();
     }
 
     /**
@@ -46,10 +58,6 @@ public class CatalogActivity extends AppCompatActivity {
      * the pets database.
      */
     private void displayDatabaseInfo(){
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        PetDbHelper mDbHelper = new PetDbHelper(this);
-
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -68,6 +76,18 @@ public class CatalogActivity extends AppCompatActivity {
         }
     }
 
+    private void insertPet(){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(PetEntry.COLUMN_PET_NAME, "Toto");
+        values.put(PetEntry.COLUMN_PET_BREED, "Terrier");
+        values.put(PetEntry.COLUMN_PET_GENDER, 1);
+        values.put(PetEntry.COLUMN_PET_WEIGHT, 7);
+
+        db.insert(PetEntry.TABLE_NAME, null, values);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_catalog, menu);
@@ -80,6 +100,8 @@ public class CatalogActivity extends AppCompatActivity {
         switch (item.getItemId()){
             //Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
+                insertPet();
+                displayDatabaseInfo();
                 return true;
 
             case R.id.action_delete_all_entries:
