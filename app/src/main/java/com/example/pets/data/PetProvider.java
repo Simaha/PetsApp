@@ -30,6 +30,12 @@ public class PetProvider extends ContentProvider {
      */
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+    // Static initializer. This is run the first time anything is called from this class.
+    static{
+        sUriMatcher.addURI(PetContract.CONTENT_AUTHORITY, PetContract.PATH_PETS, PETS);
+        sUriMatcher.addURI(PetContract.CONTENT_AUTHORITY, PetContract.PATH_PETS+"/#", PET_ID);
+    }
+
     /**
      * Initialize the provider and the database helper object.
      */
