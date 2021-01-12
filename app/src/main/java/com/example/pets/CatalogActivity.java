@@ -13,6 +13,7 @@ import android.provider.BaseColumns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,8 +71,20 @@ public class CatalogActivity extends AppCompatActivity {
                 null,                   // Selection criteria
                 null);                  // The sort order for the returned rows
 
-        TextView displayView = (TextView) findViewById(R.id.text_view_pet);
+        //Find the listView to populate
+        ListView listView = findViewById(R.id.text_view_pet);
 
+        //Setup a cursor adapter
+        PetCursorAdapter petAdapter = new PetCursorAdapter(this, cursor);
+
+        //Attach cursor adapter to the listView
+        listView.setAdapter(petAdapter);
+
+        // Switch to new cursor and update contents of ListView
+        petAdapter.changeCursor(cursor);
+
+        /**
+         *
         try {
             // Create a header in the Text View that looks like this:
             //
@@ -100,7 +113,7 @@ public class CatalogActivity extends AppCompatActivity {
                 // at the current row the cursor is on.
                 int currentID = cursor.getInt(idColumnIndex);
                 String currentName = cursor.getString(nameColumnIndex);
-                String currentBreed = cursor.getString(breedColumnIndex);
+                String currentBreed = cursor.getString(breedColudisplaymnIndex);
                 int currentGender = cursor.getInt(genderColumnIndex);
                 int currentWeight = cursor.getInt(weightColumnIndex);
                 // Display the values from each column of the current row in the cursor in the TextView
@@ -115,6 +128,8 @@ public class CatalogActivity extends AppCompatActivity {
             // resources and makes it invalid.
             cursor.close();
         }
+
+         */
     }
 
     /**
