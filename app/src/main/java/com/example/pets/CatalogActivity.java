@@ -1,8 +1,12 @@
 package com.example.pets;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,6 +17,7 @@ import android.provider.BaseColumns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 /**
  * Displays list of pets that were entered and stored in the app.
  */
-public class CatalogActivity extends AppCompatActivity {
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +88,24 @@ public class CatalogActivity extends AppCompatActivity {
 
         //Attach cursor adapter to the listView
         listView.setAdapter(petAdapter);
+
+        //Setup item click listener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                //Create new intent to go to {@link EditorActivity}
+               Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+
+               Uri currentPetUri = ContentUris.withAppendedId(PetEntry.CONTENT_URI, id);
+
+               //Set the URI on the data field of the intent
+               intent.setData(currentPetUri);
+
+               //Launch the {@link EditorActivity} to display the data for the current pet
+               startActivity(intent);
+
+            }
+        });
     }
 
     /**
@@ -127,5 +150,21 @@ public class CatalogActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
     }
 }
