@@ -27,6 +27,8 @@ import com.example.pets.data.PetContract.PetEntry;
 import com.example.pets.data.PetDbHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import static androidx.loader.app.LoaderManager.*;
+
 /**
  * Displays list of pets that were entered and stored in the app.
  */
@@ -64,7 +66,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         listView.setAdapter(mCursorAdapter);
         
         //Kick off the loader
-        getLoaderManager().initLoader(PET_LOADER, null, (android.app.LoaderManager.LoaderCallbacks<Object>) this);
+        getSupportLoaderManager().initLoader(PET_LOADER, null, this);
 
         //Setup item click listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
